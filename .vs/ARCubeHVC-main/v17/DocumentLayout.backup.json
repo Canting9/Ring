@@ -1,0 +1,93 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|c:\\users\\ct\\desktop\\arcubehvc-main\\assets\\meunbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|solutionrelative:assets\\meunbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\assets\\scripts\\oscuipanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\oscuipanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\assets\\togglecanvas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|solutionrelative:assets\\togglecanvas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\assets\\scripts\\button.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37C016AB-C53F-FCC4-BA81-E1D1F4BCA296}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\button.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MeunButton.cs",
+              "DocumentMoniker": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\MeunButton.cs",
+              "RelativeDocumentMoniker": "Assets\\MeunButton.cs",
+              "ToolTip": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\MeunButton.cs",
+              "RelativeToolTip": "Assets\\MeunButton.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T00:12:44.879Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "OscUiPanel.cs",
+              "DocumentMoniker": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\Scripts\\OscUiPanel.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\OscUiPanel.cs",
+              "ToolTip": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\Scripts\\OscUiPanel.cs",
+              "RelativeToolTip": "Assets\\Scripts\\OscUiPanel.cs",
+              "ViewState": "AgIAAMMAAAAAAAAAAABIwEoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T23:47:27.215Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ToggleCanvas.cs",
+              "DocumentMoniker": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\ToggleCanvas.cs",
+              "RelativeDocumentMoniker": "Assets\\ToggleCanvas.cs",
+              "ToolTip": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\ToggleCanvas.cs",
+              "RelativeToolTip": "Assets\\ToggleCanvas.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T06:00:20.543Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "button.cs",
+              "DocumentMoniker": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\Scripts\\button.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\button.cs",
+              "ToolTip": "C:\\Users\\CT\\Desktop\\ARCubeHVC-main\\Assets\\Scripts\\button.cs",
+              "RelativeToolTip": "Assets\\Scripts\\button.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T00:24:15.606Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
