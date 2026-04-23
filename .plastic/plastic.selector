@@ -1,4 +1,0 @@
-repository "ARCube@anwaldt@cloud"
-  path "/"
-    br "/main"
-    co "/main"
