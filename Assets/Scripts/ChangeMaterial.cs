@@ -1,25 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ChangeMaterial : MonoBehaviour
 {
-    public Material[] materials;
-    private int currentIndex = 0;
+    public Material defaultMaterial;
+    public Material melodyMaterial;
+    public Material chordMaterial;
+    public Material bassMaterial;
+    public Material drumMaterial;
+
     private MeshRenderer meshRenderer;
+    [HideInInspector]
+    public string currentTrack = "";  // 公开，让 BallSnapper 能读取
 
     void Start()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
     }
 
-    public void NextMaterial()
+    public void SetTrack(string trackName)
     {
-      if (materials == null || materials.Length == 0) return;
-      if (meshRenderer == null) return;
+        if (meshRenderer == null) return;
 
-      currentIndex = (currentIndex + 1) % materials.Length;
-      meshRenderer.material = materials[currentIndex];
+        if (currentTrack == trackName)
+        {
+            meshRenderer.material = defaultMaterial;
+            currentTrack = "";
+            return;
+        }
+
+        currentTrack = trackName;
+        switch (trackName)
+        {
+            case "melody":
+                meshRenderer.material = melodyMaterial;
+                break;
+            case "chord":
+                meshRenderer.material = chordMaterial;
+                break;
+            case "bass":
+                meshRenderer.material = bassMaterial;
+                break;
+            case "drum":
+                meshRenderer.material = drumMaterial;
+                break;
+        }
     }
 
+    public void OnMelody() { SetTrack("melody"); }
+    public void OnChord() { SetTrack("chord"); }
+    public void OnBass() { SetTrack("bass"); }
+    public void OnDrum() { SetTrack("drum"); }
 }

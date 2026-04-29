@@ -6,6 +6,7 @@ public class BallSnapper : MonoBehaviour
 {
     private Rigidbody rb;
     private Grabbable grabbable;
+    private ChangeMaterial changeMaterial;
     private int originalLayer;
     public float snapDistance = 0.3f;
     public float smoothTime = 0.15f;
@@ -14,15 +15,45 @@ public class BallSnapper : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         grabbable = GetComponent<Grabbable>();
+        changeMaterial = GetComponent<ChangeMaterial>();
         originalLayer = gameObject.layer;
     }
 
     public void OnRelease()
     {
-        GrooveData bestSlot = SlotManager.Instance.FindClosest(
-            transform.position, snapDistance);
+        // 没选 track 就不吸附
+        if (changeMaterial == null || changeMaterial.currentTrack == "")
+            return;
+
+        GrooveData bestSlot = FindMatchingSlot();
         if (bestSlot != null)
             StartCoroutine(Action_SnapToSlot(bestSlot));
+    }
+
+    GrooveData FindMatchingSlot()
+    {
+        GrooveData best = null;
+        float bestDist = snapDistance;
+
+        // 用 SlotManager 的列表，但只匹配同 track 的坑
+        // 直接用 FindObjectsOfType 一次也行，因为只在松手时调用
+        GrooveData[] allSlots = FindObjectsOfType<GrooveData>();
+
+        foreach (var slot in allSlots)
+        {
+            if (slot.hasBall) continue;
+
+            // 核心：只匹配同 track 的坑
+            if (slot.trackType != changeMaterial.currentTrack) continue;
+
+            float d = Vector3.Distance(transform.position, slot.transform.position);
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = slot;
+            }
+        }
+        return best;
     }
 
     IEnumerator Action_SnapToSlot(GrooveData targetSlot)
@@ -56,7 +87,6 @@ public class BallSnapper : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
 
-        // ★ 彻底关闭碰撞体，不再参与任何物理计算
         GetComponent<Collider>().enabled = false;
     }
 
@@ -64,9 +94,8 @@ public class BallSnapper : MonoBehaviour
     {
         StopAllCoroutines();
 
-        // 恢复一切
-        GetComponent<Collider>().enabled = true;    // 先开碰撞体
-        GetComponent<Collider>().isTrigger = false;  // 恢复实体碰撞
+        GetComponent<Collider>().enabled = true;
+        GetComponent<Collider>().isTrigger = false;
         gameObject.layer = originalLayer;
         if (grabbable != null) grabbable.enabled = true;
 
