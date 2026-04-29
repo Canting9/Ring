@@ -5,10 +5,12 @@ public class BallUIToggle : MonoBehaviour
 {
     public GameObject uiPanel;
     private HandGrabInteractable handGrab;
+    private NoteSelector noteSelector;
 
     void Start()
     {
         handGrab = GetComponentInChildren<HandGrabInteractable>();
+        noteSelector = GetComponent<NoteSelector>();
         if (uiPanel != null) uiPanel.SetActive(false);
     }
 
@@ -32,8 +34,11 @@ public class BallUIToggle : MonoBehaviour
             if (isLeft) break;
         }
 
-        if (uiPanel != null)
-            uiPanel.SetActive(isLeft);
+        if (isLeft)
+        {
+            if (uiPanel != null) uiPanel.SetActive(true);
+            if (noteSelector != null) noteSelector.ResetToTrackPanel();
+        }
     }
 
     public void OnBallRelease()
