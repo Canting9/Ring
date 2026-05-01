@@ -12,8 +12,11 @@ public class BPMSliderController : MonoBehaviour
     public float minBpm = 60f;
     public float maxBpm = 180f;
     public float interactDistance = 0.03f;
+    public float unlockTime = 1f;  // 碰到多久才解锁
 
     private RectTransform sliderRect;
+    private float touchTimer = 0f;
+    private bool unlocked = false;
 
     void Start()
     {
@@ -31,11 +34,27 @@ public class BPMSliderController : MonoBehaviour
     {
         if (rightIndexTip == null || sliderRect == null) return;
 
-        // 检查手指是否靠近 slider
         float dist = DistanceToSlider(rightIndexTip.position);
-        if (dist > interactDistance) return;
 
-        // 把手指位置映射到 slider 的 0-1 范围
+        if (dist > interactDistance)
+        {
+            // 手指离开，重置计时器和锁定状态
+            touchTimer = 0f;
+            unlocked = false;
+            return;
+        }
+
+        // 手指在范围内，开始计时
+        if (!unlocked)
+        {
+            touchTimer += Time.deltaTime;
+            if (touchTimer >= unlockTime)
+                unlocked = true;
+            else
+                return;  // 还没到 1 秒，不移动 slider
+        }
+
+        // 解锁了才能移动
         Vector3 localPos = sliderRect.InverseTransformPoint(rightIndexTip.position);
         float width = sliderRect.rect.width;
         float normalized = Mathf.Clamp01((localPos.x + width * 0.5f) / width);
@@ -51,7 +70,6 @@ public class BPMSliderController : MonoBehaviour
         float width = sliderRect.rect.width;
         float height = sliderRect.rect.height;
 
-        // 只检查 Y 和 Z 方向的距离（手指在 slider 前方）
         float yDist = Mathf.Max(0, Mathf.Abs(localPos.y) - height * 0.5f);
         float zDist = Mathf.Abs(localPos.z);
 

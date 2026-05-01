@@ -4,103 +4,109 @@ using System.Collections.Generic;
 public class CrateBallManager : MonoBehaviour
 {
     [Header("层级与母体")]
-    public Transform buildingBlockCube;   // [BuildingBlock] Cube
-    public GameObject workingBallSample;  // 场景里那个能用的 src1 母体
+    public Transform buildingBlockCube;
+    public GameObject workingBallSample;
 
     [Header("生成设置")]
     public Transform spawnPoint;
-    public int targetCount = 5;           // 你设定的 5 个球
 
-    // 这个列表是逻辑核心，记录目前在“感应区”内的球
-    private List<GameObject> ballsInCrate = new List<GameObject>();
+    private List<GameObject> balls = new List<GameObject>();
 
-    void Start()
+    public void AddBall()
     {
-        if (workingBallSample == null || buildingBlockCube == null || spawnPoint == null)
-        {
-            Debug.LogError("！！请检查 Inspector：母体、Cube 或 SpawnPoint 没拖进来！！");
-            return;
-        }
+        if (workingBallSample == null || buildingBlockCube == null || spawnPoint == null) return;
 
-        // 开局先生成 5 个
-        for (int i = 0; i < targetCount; i++)
-        {
-            SpawnNewBall();
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        // 1. 检查层级
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ball"))
-        {
-            GameObject incomingBall = other.gameObject;
-
-            // 如果是刚生成的“自己人”，已经在名单里了，直接跳过
-            if (ballsInCrate.Contains(incomingBall)) return;
-
-            // 2. 回收逻辑：如果盒子里已经够 5 个了，再丢进来就剪掉（销毁）
-            if (ballsInCrate.Count >= targetCount)
-            {
-                Debug.Log("盒子满了，销毁多余的小球");
-                Destroy(incomingBall);
-            }
-            else
-            {
-                // 3. 如果没满，就把这个外来的球加入名单
-                ballsInCrate.Add(incomingBall);
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ball"))
-        {
-            GameObject exitingBall = other.gameObject;
-
-            // 4. 补货逻辑：如果拿走的球在名单里
-            if (ballsInCrate.Contains(exitingBall))
-            {
-                ballsInCrate.Remove(exitingBall);
-                Debug.Log("球被拿走，当前剩余：" + ballsInCrate.Count);
-
-                // 如果剩下的球少于 5 个，补一个
-                if (ballsInCrate.Count < targetCount)
-                {
-                    SpawnNewBall();
-                }
-            }
-        }
-    }
-
-    void SpawnNewBall()
-    {
-        // 克隆母体到 Cube 之下
-        GameObject newBall = Instantiate(workingBallSample, buildingBlockCube);
-
-        // 强行激活
+        GameObject newBall = Instantiate(workingBallSample);
         newBall.SetActive(true);
 
-        // 设置位置和微小偏移，防止重叠
         float offsetX = Random.Range(-0.04f, 0.04f);
         float offsetZ = Random.Range(-0.04f, 0.04f);
         newBall.transform.position = spawnPoint.position + new Vector3(offsetX, 0.02f, offsetZ);
         newBall.transform.rotation = spawnPoint.rotation;
 
-        // 【关键】：生成的球要立刻加入名单，否则会被 OnTriggerEnter 误杀
-        if (!ballsInCrate.Contains(newBall))
+        newBall.transform.SetParent(buildingBlockCube, true);
+        newBall.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+        // 重置为白色
+        ChangeMaterial cm = newBall.GetComponent<ChangeMaterial>();
+        if (cm != null)
         {
-            ballsInCrate.Add(newBall);
+            cm.currentTrack = "";
+            MeshRenderer mr = newBall.GetComponentInChildren<MeshRenderer>();
+            if (mr != null && cm.defaultMaterial != null)
+                mr.material = cm.defaultMaterial;
         }
 
-        // 唤醒物理，确保它能触发碰撞
+        // 隐藏音高标签
+        NoteSelector ns = newBall.GetComponent<NoteSelector>();
+        if (ns != null && ns.ballLabel != null)
+            ns.ballLabel.gameObject.SetActive(false);
+
         Rigidbody rb = newBall.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.velocity = Vector3.zero;
+            rb.constraints = RigidbodyConstraints.None;
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
             rb.WakeUp();
         }
+
+        balls.Add(newBall);
     }
+
+    public void RemoveBall()
+    {
+        if (balls.Count == 0) return;
+
+        // 找离 crate 最近的球
+        GameObject closest = null;
+        float closestDist = float.MaxValue;
+
+        for (int i = balls.Count - 1; i >= 0; i--)
+        {
+            // 清理已被销毁的球
+            if (balls[i] == null)
+            {
+                balls.RemoveAt(i);
+                continue;
+            }
+
+            float d = Vector3.Distance(balls[i].transform.position, spawnPoint.position);
+            if (d < closestDist)
+            {
+                closestDist = d;
+                closest = balls[i];
+            }
+        }
+
+        if (closest != null)
+        {
+            balls.Remove(closest);
+            Destroy(closest);
+        }
+    }
+
+    public void RemoveAllBalls()
+{
+    for (int i = balls.Count - 1; i >= 0; i--)
+    {
+        if (balls[i] != null)
+            Destroy(balls[i]);
+    }
+    balls.Clear();
+
+    // 也删掉场景里所有在坑上的球
+    GrooveData[] allSlots = FindObjectsOfType<GrooveData>();
+    foreach (var slot in allSlots)
+    {
+        if (slot.hasBall && slot.dockedBall != null)
+        {
+            Destroy(slot.dockedBall);
+            slot.hasBall = false;
+            slot.dockedBall = null;
+        }
+    }
+}
 }
