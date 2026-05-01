@@ -24,10 +24,23 @@ public class CrateBallManager : MonoBehaviour
         newBall.transform.position = spawnPoint.position + new Vector3(offsetX, 0.02f, offsetZ);
         newBall.transform.rotation = spawnPoint.rotation;
 
-        // 先设父物体
         newBall.transform.SetParent(buildingBlockCube, true);
-        // 再设 localScale，和原始 src1 一样
         newBall.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+        // 重置为白色
+        ChangeMaterial cm = newBall.GetComponent<ChangeMaterial>();
+        if (cm != null)
+        {
+            cm.currentTrack = "";
+            MeshRenderer mr = newBall.GetComponentInChildren<MeshRenderer>();
+            if (mr != null && cm.defaultMaterial != null)
+                mr.material = cm.defaultMaterial;
+        }
+
+        // 隐藏音高标签
+        NoteSelector ns = newBall.GetComponent<NoteSelector>();
+        if (ns != null && ns.ballLabel != null)
+            ns.ballLabel.gameObject.SetActive(false);
 
         Rigidbody rb = newBall.GetComponent<Rigidbody>();
         if (rb != null)
@@ -74,4 +87,26 @@ public class CrateBallManager : MonoBehaviour
             Destroy(closest);
         }
     }
+
+    public void RemoveAllBalls()
+{
+    for (int i = balls.Count - 1; i >= 0; i--)
+    {
+        if (balls[i] != null)
+            Destroy(balls[i]);
+    }
+    balls.Clear();
+
+    // 也删掉场景里所有在坑上的球
+    GrooveData[] allSlots = FindObjectsOfType<GrooveData>();
+    foreach (var slot in allSlots)
+    {
+        if (slot.hasBall && slot.dockedBall != null)
+        {
+            Destroy(slot.dockedBall);
+            slot.hasBall = false;
+            slot.dockedBall = null;
+        }
+    }
+}
 }
